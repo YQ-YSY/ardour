@@ -2241,6 +2241,8 @@ private:
 	std::string unnamed_file_name () const;
 
 	gint _update_pretty_names;
+
+	void setup_thread_local_variables ();
 };
 
 
