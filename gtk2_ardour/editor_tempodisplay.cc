@@ -441,7 +441,7 @@ Editor::mouse_add_new_meter_event (timepos_t pos)
 		return;
 	}
 
-	TempoMap::SharedPtr map (TempoMap::use());
+	TempoMap::SharedPtr map (TempoMap::write_copy());
 	MeterDialog meter_dialog (map, pos, _("add"));
 
 	switch (meter_dialog.run ()) {
@@ -473,6 +473,8 @@ Editor::mouse_add_new_meter_event (timepos_t pos)
 
 	_session->add_command (new MementoCommand<Temporal::TempoMap> (new Temporal::TempoMap::MementoBinder(), &before, &map->get_state()));
 	commit_reversible_command ();
+
+	TempoMap::update (map);
 
 	//map.dump (cerr);
 }
@@ -519,7 +521,7 @@ Editor::edit_meter_section (Temporal::MeterPoint& section)
 	Temporal::BBT_Time when;
 	meter_dialog.get_bbt_time (when);
 
-	TempoMap::SharedPtr tmap (TempoMap::use());
+	TempoMap::SharedPtr tmap (TempoMap::write_copy());
 
 	begin_reversible_command (_("replace meter mark"));
 	XMLNode &before = tmap->get_state();
@@ -529,6 +531,8 @@ Editor::edit_meter_section (Temporal::MeterPoint& section)
 	XMLNode &after = tmap->get_state();
 	_session->add_command (new MementoCommand<Temporal::TempoMap> (new Temporal::TempoMap::MementoBinder(), &before, &after));
 	commit_reversible_command ();
+
+	TempoMap::update (tmap);
 }
 
 void
@@ -549,7 +553,7 @@ Editor::edit_tempo_section (TempoPoint& section)
 	bpm = max (0.01, bpm);
 	const Tempo tempo (bpm, nt, end_bpm);
 
-	TempoMap::SharedPtr tmap (TempoMap::use());
+	TempoMap::SharedPtr tmap (TempoMap::write_copy());
 
 	Temporal::BBT_Time when;
 	tempo_dialog.get_bbt_time (when);
@@ -562,6 +566,8 @@ Editor::edit_tempo_section (TempoPoint& section)
 	XMLNode &after = tmap->get_state();
 	_session->add_command (new MementoCommand<Temporal::TempoMap> (new Temporal::TempoMap::MementoBinder(), &before, &after));
 	commit_reversible_command ();
+
+	TempoMap::update (tmap);
 }
 
 void
@@ -580,12 +586,14 @@ gint
 Editor::real_remove_tempo_marker (TempoPoint *section)
 {
 	begin_reversible_command (_("remove tempo mark"));
-	TempoMap::SharedPtr tmap (TempoMap::use());
+	TempoMap::SharedPtr tmap (TempoMap::write_copy());
 	XMLNode &before = tmap->get_state();
 	tmap->remove_tempo (*section);
 	XMLNode &after = tmap->get_state();
 	_session->add_command (new MementoCommand<Temporal::TempoMap> (new Temporal::TempoMap::MementoBinder(), &before, &after));
 	commit_reversible_command ();
+
+	TempoMap::update (tmap);
 
 	return FALSE;
 }
@@ -615,12 +623,14 @@ gint
 Editor::real_remove_meter_marker (Temporal::MeterPoint *section)
 {
 	begin_reversible_command (_("remove tempo mark"));
-	TempoMap::SharedPtr tmap (TempoMap::use());
+	TempoMap::SharedPtr tmap (TempoMap::write_copy());
 	XMLNode &before = tmap->get_state();
 	tmap->remove_meter (*section);
 	XMLNode &after = tmap->get_state();
 	_session->add_command (new MementoCommand<Temporal::TempoMap> (new Temporal::TempoMap::MementoBinder(), &before, &after));
 	commit_reversible_command ();
+
+	TempoMap::update (tmap);
 
 	return FALSE;
 }
