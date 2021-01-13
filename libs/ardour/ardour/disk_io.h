@@ -59,7 +59,7 @@ public:
 
 	static const std::string state_node_name;
 
-	DiskIOProcessor (Session&, const std::string& name, Flag f);
+	DiskIOProcessor (Session&, const std::string& name, Flag f, Temporal::TimeDomain td);
 	virtual ~DiskIOProcessor ();
 
 	void set_track (boost::shared_ptr<Track>);
