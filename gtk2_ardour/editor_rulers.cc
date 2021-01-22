@@ -1510,11 +1510,11 @@ Editor::metric_get_bbt (std::vector<ArdourCanvas::Ruler::Mark>& marks, int64_t l
 //	default:
 		bbt_nmarks = bbt_bars + 2;
 		for (n = 0,  i = grid.begin(); i != grid.end() && n < bbt_nmarks; ++i) {
-			if ((*i).is_bar()) {
+			if ((*i).bbt().is_bar()) {
 				snprintf (buf, sizeof(buf), "%" PRIu32, (*i).bbt().bars);
 				mark.style = ArdourCanvas::Ruler::Mark::Major;
 				mark.label = buf;
-				mark.position = (*i).sample;
+				mark.position = (*i).sample (sr);
 				marks.push_back (mark);
 				++n;
 			}
