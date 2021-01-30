@@ -99,6 +99,7 @@ private:
 
 	void arm_all ();
 	void arm_none ();
+	void new_take ();
 	void peak_reset ();
 
 	void update_sensitivity ();
@@ -123,6 +124,7 @@ private:
 	ArdourWidgets::ArdourHSpacer _toolbar_sep;
 	ArdourWidgets::ArdourButton  _btn_rec_all;
 	ArdourWidgets::ArdourButton  _btn_rec_none;
+	ArdourWidgets::ArdourButton  _btn_new_take;
 	ArdourWidgets::ArdourButton  _btn_peak_reset;
 
 	int  _meter_box_width;
